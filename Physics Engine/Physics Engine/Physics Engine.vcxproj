@@ -150,6 +150,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Spring.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="Spring.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
