@@ -15,6 +15,11 @@ template <typename dataType> class Vector
 			x = X;
 			y = Y;
 			}
+		Vector (dataType alpha)
+			{
+			x = cos (alpha);
+			y = sin (alpha);
+			}
 
 		Vector operator+ (Vector const lvec)
 			{
@@ -24,11 +29,11 @@ template <typename dataType> class Vector
 			{
 			return Vector (x - lvec.x, y - lvec.y);
 			};
-		Vector operator* (Vector const lvec)
+		dataType operator* (Vector const lvec)
 			{
-			return Vector (lvec.x*x, lvec.y*y);
+			return lvec.x*x + lvec.y*y;
 			};
-		Vector & operator* (float factor)
+		Vector operator* (float factor)
 			{
 			return Vector (x*factor, y*factor);
 			};

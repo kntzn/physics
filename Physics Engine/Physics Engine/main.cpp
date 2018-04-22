@@ -1,34 +1,51 @@
 #include <SFML/Graphics.hpp>
 #include "Object.h"
 #include "Spring.h"
+#include "Body.h"
 #include <stdio.h>
 #include <iostream>
 
 int main ()
 	{
+	sf::Image img;
+	img.loadFromFile ("spr.png");
+	img.createMaskFromColor (sf::Color (0, 0, 255));
 	sf::Texture txtr;
-	txtr.loadFromFile ("spr.png");
+	txtr.loadFromImage (img);
 	sf::Sprite spring_sprite;
 	spring_sprite.setTexture (txtr);
 	spring_sprite.setOrigin (sf::Vector2f (txtr.getSize ())/2.f);
 
-	Spring spr1 (&spring_sprite, Vector <float> (200, 200), Vector <float> (400, 200), 1000);
-	Object left  (Vector <float> (200, 200), 1000, Vector <float> (10, 0));
-	Object right (Vector <float> (400, 200), 1000, Vector <float> (0, 3));
+
+	Vector <float> points_array [3] = 
+		{
+		Vector <float> (20, 20),
+		Vector <float> (-80, 20),
+		Vector <float> (-20, -40)
+		};
+
+	Body body (Vector <float> (400, 300), 10, Vector <float> (40, 0), 3, points_array);
+	Body body2 (Vector <float> (400, 500), 10, Vector <float> (-40, 0), 3, points_array);
+	Spring spr (&spring_sprite, body.getPos (), body2.getPos (), 10.0f);
 
 	sf::RenderWindow window (sf::VideoMode (1600, 900), "");
 
 	while (window.isOpen ())
 		{
-		spr1.update (left.getPos(), right.getPos());
+		spr.update (body.getPos (), body2.getPos ());
+
+		body.addForce (spr.getForceLeft (), 0.016f);
+		body2.addForce (spr.getForceRight (), 0.016f);
 		
-		left.addForce (spr1.getForceLeft (), 1/60.f);
-		right.addForce (spr1.getForceRight (), 1/60.f);
-		left.update (1/60.f);
-		right.update (1/60.f);
+		body.update (0.016f);
+		body2.update (0.016f);
 
 		window.clear ();
-		spr1.draw (window, true);
+
+		spr.draw (window);
+		body.draw (window);
+		body2.draw (window);
+
 		window.display ();
 		}
 

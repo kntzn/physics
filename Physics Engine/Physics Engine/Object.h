@@ -3,7 +3,7 @@
 
 class Object
 	{
-	private:
+	protected:
 		Vector <float> r, v;
 		float mass = 1;
 
