@@ -5,7 +5,7 @@
 class Body:
 	public Object
 	{
-	private:
+	protected:
 		// Vectors that contains points' distance from mass center (x) and additional angle of rotation (y)
 		Vector <float> * points = nullptr;
 		size_t n_points = 0;
