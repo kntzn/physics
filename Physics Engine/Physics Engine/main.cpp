@@ -58,6 +58,4 @@ int main ()
 
 		window.display ();
 		}
-
-	system ("pause");
 	}

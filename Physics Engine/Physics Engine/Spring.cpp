@@ -75,10 +75,10 @@ void Spring::draw (sf::RenderWindow & window, bool points)
 	// Setting color according to deformation (Red means stretched, blue means compressed)
 	// if (spring is stretched) calculating spring color according to max size ever reached
 	if (delta_dist > 0)
-		spring_sprite.setColor (sf::Color (127 + delta_dist/(init_dist - max_dist)*127, 0, 127 - delta_dist/(init_dist - max_dist)*127));
+		spring_sprite.setColor (sf::Color (127 + sf::Uint8 (delta_dist/(init_dist - max_dist)*127), 0, 127 - sf::Uint8 (delta_dist/(init_dist - max_dist)*127)));
 	// Otherwise calculating spring color according to min size ever reached
 	else
-		spring_sprite.setColor (sf::Color (127 - delta_dist/(init_dist - min_dist)*127, 0, 127 + delta_dist/(init_dist - min_dist)*127));
+		spring_sprite.setColor (sf::Color (127 - sf::Uint8 (delta_dist/(init_dist - min_dist)*127), 0, 127 + sf::Uint8 (delta_dist/(init_dist - min_dist)*127)));
 
 	// Drawing sprite
 	window.draw (spring_sprite);

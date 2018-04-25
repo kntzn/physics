@@ -11,7 +11,7 @@ Body::Body (Vector <float> Position, float Mass, Vector <float> Velocity, unsign
 	for (size_t i = 0; i < n_points; i++)
 		mass_center = mass_center + pointsArray [i];
 
-	mass_center = mass_center / n_points;
+	mass_center = mass_center / float (n_points);
 
 	// Filling info array with angles and distances
 	for (size_t i = 0; i < n_points; i++)
@@ -74,6 +74,9 @@ Vector <float> Body::getPointPos (size_t point)
 
 		return deltaPos;
 		}
+
+	// In case of incorrect point id function returns mass center coordinates
+	return r;
 	}
 
 void Body::draw (sf::RenderWindow & window)
