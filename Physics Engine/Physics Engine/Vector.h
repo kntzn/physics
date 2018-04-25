@@ -41,7 +41,7 @@ template <typename dataType> class Vector
 			{
 			return Vector (-x, -y);
 			};
-		Vector & operator/ (const float factor)
+		Vector & operator/ (float factor)
 			{
 			return Vector (x/factor, y/factor);
 			};
