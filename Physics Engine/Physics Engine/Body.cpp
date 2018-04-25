@@ -57,8 +57,7 @@ void Body::applyForce (size_t point, Vector<float> Force, float dt)
 	}
 void Body::update (float dt)
 	{
-	angle += omega*dt;
-	Object::update (dt);
+	
 	}
 
 Vector <float> Body::getPointPos (size_t point)

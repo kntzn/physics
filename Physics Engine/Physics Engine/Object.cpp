@@ -16,9 +16,6 @@ void Object::update     (float dt)
 	}
 void Object::addForce   (Vector<float> F, float dt)
 	{
-	F = F/mass;
-	F = F*dt;
-	v = v + F;
 	}
 void Object::accelerate (Vector<float> a, float dt)
 	{

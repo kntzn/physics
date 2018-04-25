@@ -1,19 +1,6 @@
 #include "Ground.h"
 
 
-
-Ground::Ground (sf::Texture &ground_fill_txtr, Vector <float> Position, unsigned int nPoints, Vector <float> * pointsArray):
-	Body (Position, INFINITY, Vector <float> (0, 0), nPoints, pointsArray)
-	{
-	ground_txtr = ground_fill_txtr;
-	//ground_txtr.setRepeated (true);
-	}
-
-
-Ground::~Ground ()
-	{
-	}
-
 void Ground::draw (sf::RenderWindow & window)
 	{
 	sf::ConvexShape convex (n_points);
