@@ -41,14 +41,17 @@ int main ()
 
 	while (window.isOpen ())
 		{
+		float dt = 0.016f;
+
 		spr.update (body.getPos (), body2.getPos ());
 
-		body.addForce (spr.getForceLeft (), 0.016f);
-		body2.addForce (spr.getForceRight (), 0.016f);
+		body.addForce (spr.getForceLeft (), dt);
+		body2.addForce (spr.getForceRight (), dt);
 		
-		body.update (0.016f);
-		body2.update (0.016f);
+		body.update (dt);
+		body2.update (dt);
 
+		// --------- Graphics ---------
 		window.clear ();
 
 		spr.draw (window);
