@@ -6,7 +6,8 @@ Ground::Ground (sf::Texture &ground_fill_txtr, Vector <float> Position, unsigned
 	Body (Position, INFINITY, Vector <float> (0, 0), nPoints, pointsArray)
 	{
 	ground_txtr = ground_fill_txtr;
-	//ground_txtr.setRepeated (true);
+	
+	type = objectType::ground;
 	}
 
 

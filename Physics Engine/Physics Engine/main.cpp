@@ -31,22 +31,22 @@ int main ()
 		Vector <float> (-20, -40)
 		};
 
-	Body body (Vector <float> (400, 300), 10, Vector <float> (40, 0), 3, points_array);
-	Body body2 (Vector <float> (400, 500), 10, Vector <float> (-40, 0), 3, points_array);
+	Body body (Vector <float> (400, 300), 1000, Vector <float> (10, 0), 3, points_array);
+	Body body2 (Vector <float> (400, 500), 1000, Vector <float> (-10, 0), 3, points_array);
 	Ground gnd (ground_fill_txtr, Vector <float> (800, 600), 3, points_array);
 
-	Spring spr (&spring_sprite, body.getPos (), body2.getPos (), 10.0f);
+	Spring spr (&spring_sprite, body.getPos (), body2.getPos (), 3.0f);
 
 	sf::RenderWindow window (sf::VideoMode (1600, 900), "");
 
 	while (window.isOpen ())
 		{
-		float dt = 0.016f;
+		float dt = 0.0016f;
 
-		spr.update (body.getPos (), body2.getPos ());
+		spr.update (body.getPointPos (1), body2.getPointPos (1));
 
-		body.addForce (spr.getForceLeft (), dt);
-		body2.addForce (spr.getForceRight (), dt);
+		body.applyForce (1, spr.getForceLeft (), dt);
+		body2.applyForce (1, spr.getForceRight (), dt);
 		
 		body.update (dt);
 		body2.update (dt);

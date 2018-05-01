@@ -4,7 +4,7 @@ Body::Body (Vector <float> Position, float Mass, Vector <float> Velocity, unsign
 	{
 	// Creating array of points info
 	n_points = nPoints;
-	points = (Vector <float>*) calloc (n_points, sizeof Vector <float>);
+	points = (Vector <float>*) calloc (n_points, sizeof (Vector <float>));
 
 	// Calculating coordinates of mass center
 	Vector <float> mass_center;
@@ -30,6 +30,7 @@ Body::Body (Vector <float> Position, float Mass, Vector <float> Velocity, unsign
 	for (size_t i = 0; i < n_points; i++)
 		J += points [i].x * points [i].x * (mass/n_points) / 3;
 
+	type = objectType::body;
 	}
 Body::~Body ()
 	{

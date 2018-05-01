@@ -1,11 +1,19 @@
 #pragma once
 #include "Vector.h"
 
+enum objectType
+	{
+	unnamed_type,
+	body,
+	ground
+	};
+
 class Object
 	{
 	protected:
 		Vector <float> r, v;
 		float mass = 1;
+		uint32_t type = unnamed_type;
 
 	public:
 		Object (Vector <float> Position, float Mass, Vector <float> Velocity);
