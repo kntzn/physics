@@ -2,8 +2,8 @@
 
 
 
-Ground::Ground (sf::Texture &ground_fill_txtr, Vector <float> Position, unsigned int nPoints, Vector <float> * pointsArray):
-	Body (Position, INFINITY, Vector <float> (0, 0), nPoints, pointsArray)
+Ground::Ground (sf::Texture &ground_fill_txtr, Vectorf Position, unsigned int nPoints, Vectorf * pointsArray):
+	Body (Position, INFINITY, Vectorf (0, 0), nPoints, pointsArray)
 	{
 	ground_txtr = ground_fill_txtr;
 	
@@ -23,7 +23,7 @@ void Ground::draw (sf::RenderWindow & window)
 
 	for (size_t i = 0; i < n_points; i++)
 		{
-		Vector <float> deltaPos (points [i].y+angle);
+		Vectorf deltaPos (points [i].y+angle);
 		deltaPos = deltaPos*points [i].x;
 
 		convex.setPoint (i, r.toSf ()+ deltaPos.toSf ());

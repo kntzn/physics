@@ -1,13 +1,17 @@
 #include "Body.h"
+#include "Constants.h"
 
-Body::Body (Vector <float> Position, float Mass, Vector <float> Velocity, unsigned int nPoints, Vector <float> * pointsArray): Object (Position, Mass, Velocity)
+Body::Body (Vectorf Position, float Mass, Vectorf Velocity, unsigned int nPoints, Vectorf * pointsArray): 
+	Object (Position, Mass, Velocity)
 	{
 	// Creating array of points info
 	n_points = nPoints;
-	points = (Vector <float>*) calloc (n_points, sizeof (Vector <float>));
+	points = (Vectorf*) calloc (n_points, sizeof (Vectorf));
+	if (points == nullptr)
+		printf ("Failed to create array of points\n");
 
 	// Calculating coordinates of mass center
-	Vector <float> mass_center;
+	Vectorf mass_center;
 	for (size_t i = 0; i < n_points; i++)
 		mass_center = mass_center + pointsArray [i];
 
@@ -17,7 +21,7 @@ Body::Body (Vector <float> Position, float Mass, Vector <float> Velocity, unsign
 	for (size_t i = 0; i < n_points; i++)
 		{
 		// Point to mass center radius vector
-		Vector <float> deltaMassCenter = mass_center-pointsArray [i];
+		Vectorf deltaMassCenter = mass_center-pointsArray [i];
 
 		// x coord - distance to center
 		points [i].x = (deltaMassCenter).size ();
@@ -50,7 +54,7 @@ void Body::applyForce (size_t point, Vector<float> Force, float dt)
 		// to which the force is applied to the center of mass of the body) 
 		//
 		// (see picture "body rotation" in folder "explanations")
-		float activeForce = Force*Vector <float> (3.1416f/2+ angle+points [point].y);
+		float activeForce = Force*Vectorf (pi/2 + angle+points [point].y);
 		
 		// Angular velocity increases proprtional to Torque 
 		omega += (activeForce * points [point].x)/J;
@@ -62,12 +66,12 @@ void Body::update (float dt)
 	Object::update (dt);
 	}
 
-Vector <float> Body::getPointPos (size_t point)
+Vectorf Body::getPointPos (size_t point)
 	{
 	if (0 <= point && point < n_points)
 		{
 		// Calculating current total angle of point:
-		Vector <float> deltaPos (points [point].y+angle);
+		Vectorf deltaPos (points [point].y+angle);
 		// Multiplying unit direction angle and distance from mass center
 		deltaPos = deltaPos*points [point].x;
 		// Adding position vector
@@ -94,7 +98,7 @@ void Body::draw (sf::RenderWindow & window)
 		point.setPosition (r.x, r.y);
 
 			
-		Vector <float> deltaPos (points [i].y+angle);
+		Vectorf deltaPos (points [i].y+angle);
 		deltaPos = deltaPos*points [i].x;
 		point.move (deltaPos.toSf());
 		window.draw (point);

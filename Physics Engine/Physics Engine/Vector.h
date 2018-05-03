@@ -60,3 +60,6 @@ template <typename dataType> class Vector
 			}
 
 	};
+
+typedef Vector <float> Vectorf;
+typedef Vector <double> Vectord;

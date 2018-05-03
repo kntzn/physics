@@ -1,7 +1,7 @@
 #include "Spring.h"
 #include "Constants.h"
 
-Spring::Spring (sf::Sprite* spring_spr, Vector<float> begin, Vector<float> end, float k)
+Spring::Spring (sf::Sprite* spring_spr, Vectorf begin, Vectorf end, float k)
 	{
 	// physics
 	hardness = k;
@@ -23,17 +23,17 @@ Spring::~Spring ()
 	}
 
 // Returns force applied to rights point
-Vector<float> Spring::getForceRight ()
+Vectorf Spring::getForceRight ()
 	{
-	return Vector<float> (-Force);
+	return Vectorf (-Force);
 	}
 // Returns force applied to left point
-Vector<float> Spring::getForceLeft ()
+Vectorf Spring::getForceLeft ()
 	{
-	return Vector<float> (Force);
+	return Vectorf (Force);
 	}
 
-void Spring::update (Vector <float> begin, Vector <float> end)
+void Spring::update (Vectorf begin, Vectorf end)
 	{
 	// Transforming difference between new (updated) positions of the ends into current size of the spring
 	curr_dist = (begin-end).size ();
@@ -65,7 +65,7 @@ void Spring::draw (sf::RenderWindow & window, bool points)
 	spring_sprite.setRotation (atan2 ((right - left).y, (right - left).x)*toDeg);
 
 	// Calculating radius vector of middle point between ends
-	// and converting Vector <float> to sf::Vector2f
+	// and converting Vectorf to sf::Vector2f
 	spring_sprite.setPosition ((right + left).toSf ()/2.f);
 
 	// Scaling sprite by width axis according to deformation
