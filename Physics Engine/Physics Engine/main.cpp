@@ -5,6 +5,7 @@
 #include "Spring.h"
 #include "Body.h"
 #include "Ground.h"
+#include "Shapes.h"
 #include <stdio.h>
 #include <iostream>
 
@@ -16,20 +17,14 @@ int main ()
 	spring_sprite.setOrigin (sf::Vector2f (txtr.getSize ())/2.f);
 
 	sf::Texture ground_fill_txtr = loadTextureWithMask ("ground.png");
+	
+	Vectorf* points_array = truePolygon (4, 40, pi/4);
 
+	Body body (Vectorf (300, 100), 10, Vectorf (1, 0), 4, points_array);
+	Body body2 (Vectorf (400, 500), 10, Vectorf (0, 0), 4, points_array);
+	Ground gnd (ground_fill_txtr, Vectorf (600, 600), 4, points_array);
 
-	Vectorf points_array [3] =
-		{
-		Vectorf (40, 40),
-		Vectorf (-160, 40),
-		Vectorf (-40, -80)
-		};
-
-	Body body (Vectorf (300, 100), 10000, Vectorf (5, 0), 3, points_array);
-	Body body2 (Vectorf (400, 500), 10000, Vectorf (-5, 0), 3, points_array);
-	Ground gnd (ground_fill_txtr, Vectorf (600, 600), 3, points_array);
-
-	Spring spr (&spring_sprite, body.getPos (), body2.getPos (), 2.0f);
+	Spring spr (&spring_sprite, gnd.getPos (), body2.getPointPos (1), 2.0f);
 
 	sf::RenderWindow window (sf::VideoMode (1600, 900), "");
 
@@ -45,9 +40,9 @@ int main ()
 			dt = dt_c;
 			}
 
-		spr.update (body.getPos (), body2.getPointPos (1));
+		spr.update (gnd.getPos (), body2.getPointPos (1));
 
-		body.addForce (spr.getForceLeft (), dt);
+		//body.addForce (spr.getForceLeft (), dt);
 		body2.applyForce (1, spr.getForceRight (), dt);
 		
 		body.update (dt);

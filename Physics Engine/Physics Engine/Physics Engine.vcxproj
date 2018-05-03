@@ -161,6 +161,7 @@
     <ClInclude Include="FileLoad.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Shapes.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
