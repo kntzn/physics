@@ -2,7 +2,7 @@
 
 
 
-Ground::Ground (sf::Texture &ground_fill_txtr, Vectorf Position, unsigned int nPoints, Vectorf * pointsArray):
+Ground::Ground (sf::Texture ground_fill_txtr, Vectorf Position, unsigned int nPoints, Vectorf * pointsArray):
 	Body (Position, INFINITY, Vectorf (0, 0), nPoints, pointsArray)
 	{
 	ground_txtr = ground_fill_txtr;

@@ -1,4 +1,6 @@
 #include <SFML/Graphics.hpp>
+
+#include "FileLoad.h"
 #include "Object.h"
 #include "Spring.h"
 #include "Body.h"
@@ -8,20 +10,12 @@
 
 int main ()
 	{
-	sf::Image img;
-	img.loadFromFile ("spr.png");
-	img.createMaskFromColor (sf::Color (0, 0, 255));
-	sf::Texture txtr;
-	txtr.loadFromImage (img);
+	sf::Texture txtr = loadTextureWithMask ("spr.png");
 	sf::Sprite spring_sprite;
 	spring_sprite.setTexture (txtr);
 	spring_sprite.setOrigin (sf::Vector2f (txtr.getSize ())/2.f);
 
-	sf::Image img_gnd;
-	img_gnd.loadFromFile ("ground.png");
-	img_gnd.createMaskFromColor (sf::Color (0, 0, 255));
-	sf::Texture ground_fill_txtr;
-	ground_fill_txtr.loadFromImage (img_gnd);
+	sf::Texture ground_fill_txtr = loadTextureWithMask ("ground.png");
 
 
 	Vectorf points_array [3] =
@@ -33,12 +27,13 @@ int main ()
 
 	Body body (Vectorf (300, 100), 10000, Vectorf (5, 0), 3, points_array);
 	Body body2 (Vectorf (400, 500), 10000, Vectorf (-5, 0), 3, points_array);
-	
+	Ground gnd (ground_fill_txtr, Vectorf (600, 600), 3, points_array);
+
 	Spring spr (&spring_sprite, body.getPos (), body2.getPos (), 2.0f);
 
 	sf::RenderWindow window (sf::VideoMode (1600, 900), "");
 
-	const float dt_c = 0.0016f;
+	const float dt_c = 0.016f;
 	sf::Clock timer;
 
 	while (window.isOpen ())
@@ -64,6 +59,7 @@ int main ()
 		spr.draw (window);
 		body.draw (window);
 		body2.draw (window);
+		gnd.draw (window);
 		
 		window.display ();
 		}
