@@ -6,8 +6,11 @@
 #include "Body.h"
 #include "Ground.h"
 #include "Shapes.h"
+#include "Pairs.h"
 #include <stdio.h>
 #include <iostream>
+#include <vector>
+#include <list>
 
 int main ()
 	{
@@ -20,15 +23,18 @@ int main ()
 	
 	Vectorf* points_array = truePolygon (4, 40, pi/4);
 
-	Body body (Vectorf (300, 100), 10, Vectorf (1, 0), 4, points_array);
-	Body body2 (Vectorf (400, 500), 10, Vectorf (0, 0), 4, points_array);
-	Ground gnd (ground_fill_txtr, Vectorf (600, 600), 4, points_array);
+	std::vector <Object*> all_objects;
+	std::vector <Pair*> interaction_pairs;
 
-	Spring spr (&spring_sprite, gnd.getPos (), body2.getPointPos (1), 2.0f);
-
+	all_objects.push_back (new Body (Vectorf (300, 100), 10, Vectorf (1, 0), 4, points_array));
+	all_objects.push_back (new Body (Vectorf (400, 500), 10, Vectorf (0, 0), 4, points_array));
+	all_objects.push_back (new Ground (ground_fill_txtr, Vectorf (600, 600), 4, points_array));
+	
+	interaction_pairs.push_back (new SpringPair (0, 1, all_objects, 0.04f, &spring_sprite));
+	
 	sf::RenderWindow window (sf::VideoMode (1600, 900), "");
 
-	const float dt_c = 0.016f;
+	const float dt_c = 0.1f;
 	sf::Clock timer;
 
 	while (window.isOpen ())
@@ -40,22 +46,21 @@ int main ()
 			dt = dt_c;
 			}
 
-		spr.update (gnd.getPos (), body2.getPointPos (1));
+		for (auto pair: interaction_pairs)
+			pair->update (all_objects, dt_c);
 
-		//body.addForce (spr.getForceLeft (), dt);
-		body2.applyForce (1, spr.getForceRight (), dt);
-		
-		body.update (dt);
-		body2.update (dt);
+		for (auto obj: all_objects)
+			obj->update (dt_c);
 
 		// --------- Graphics ---------
 		window.clear ();
 
-		spr.draw (window);
-		body.draw (window);
-		body2.draw (window);
-		gnd.draw (window);
+		for (auto obj: all_objects)
+			obj->draw (window);
 		
+		for (auto pair: interaction_pairs)
+			pair->draw (window);
+
 		window.display ();
 		}
 	}

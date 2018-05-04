@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector.h"
+#include <SFML\Graphics.hpp>
 
 enum objectType
 	{
@@ -25,6 +26,8 @@ class Object
 
 		Vectorf getPos ();
 		Vectorf getVel ();
+
+		virtual void draw (sf::RenderWindow &window) = 0;
 
 	};
 
