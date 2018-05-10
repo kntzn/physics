@@ -64,6 +64,24 @@ void Body::applyForce (int point, Vectorf Force, float dt)
 		omega += (activeForce * points [point].x)/J;
 		}
 	}
+void Body::applyForceToVirtual (Vectorf virtualPoint, Vectorf Force, float dt)
+	{ 
+	// Applying force directly to mass center:
+	Object::addForce (Force, dt);
+
+	// That part of the force that is able to rotate the body is equal to
+	// the scalar product of the force vector by the unit vector of angle
+	// (which is perpendicular to the radius vector from the point 
+	// to which the force is applied to the center of mass of the body) 
+	//
+	// (see picture "body rotation" in folder "explanations")
+	float activeForce = Force*Vectorf (pi/2 + angle + atan2f (virtualPoint.y - r.y, virtualPoint.x - r.x));
+
+	// Angular velocity increases proprtional to Torque 
+	omega += (activeForce * (virtualPoint - r).length ())/J;
+	}
+
+
 void Body::update (float dt)
 	{
 	angle += omega*dt;

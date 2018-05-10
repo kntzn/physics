@@ -29,10 +29,11 @@ int main ()
 	all_objects.push_back (new Body (Vectorf (300, 100), 1000, Vectorf (1, 0), 4, points_array));
 	all_objects.push_back (new Body (Vectorf (400, 500), 1000, Vectorf (1, 1), 4, points_array));
 	all_objects.push_back (new Ground (ground_fill_txtr, Vectorf (600, 600), 4, points_array));
-	
+	all_objects.push_back (new Body (Vectorf (600, 800), 1000, Vectorf (0, 0), 4, points_array));
+
 	interaction_pairs.push_back (new SpringPair (all_objects, 0.04f, &spring_sprite, 0, 1, 2, 2));
-	interaction_pairs.push_back (new CollisionPair (2, 1));
-	interaction_pairs.push_back (new CollisionPair (2, 0));
+	//interaction_pairs.push_back (new CollisionPair (2, 1));
+	//interaction_pairs.push_back (new CollisionPair (2, 0));
 
 
 	sf::RenderWindow window (sf::VideoMode (1600, 900), "");

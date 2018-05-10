@@ -25,6 +25,7 @@ class Body: public Object
 		~Body ();
 
 		void applyForce (int point, Vectorf Force, float dt);
+		void applyForceToVirtual (Vectorf virtualPoint, Vectorf Force, float dt);
 		void update (float dt);
 
 		Vectorf getPointPos (int point);
