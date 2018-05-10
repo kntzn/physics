@@ -5,7 +5,7 @@ Spring::Spring (sf::Sprite* spring_spr, Vectorf begin, Vectorf end, float k)
 	{
 	// physics
 	hardness = k;
-	max_dist = min_dist = init_dist = (begin-end).size();
+	max_dist = min_dist = init_dist = (begin-end).length();
 
 	right = begin;
 	left = end;
@@ -36,7 +36,7 @@ Vectorf Spring::getForceLeft ()
 void Spring::update (Vectorf begin, Vectorf end)
 	{
 	// Transforming difference between new (updated) positions of the ends into current size of the spring
-	curr_dist = (begin-end).size ();
+	curr_dist = (begin-end).length ();
 
 	// Updating minimal and maximal sizes of the spring to use them in further calculations
 	if (curr_dist > max_dist)

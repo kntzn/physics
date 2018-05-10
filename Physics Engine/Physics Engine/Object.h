@@ -22,12 +22,11 @@ class Object
 
 		void update (float dt);
 		void addForce (Vectorf F, float dt);
+		
 		void accelerate (Vectorf a, float dt);
 
 		Vectorf getPos ();
 		Vectorf getVel ();
-
-		virtual void draw (sf::RenderWindow &window) = 0;
-
+	
 	};
 

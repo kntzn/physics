@@ -15,7 +15,7 @@ Body::Body (Vectorf Position, float Mass, Vectorf Velocity, unsigned int nPoints
 	for (size_t i = 0; i < n_points; i++)
 		mass_center = mass_center + pointsArray [i];
 
-	mass_center = mass_center / float (n_points);
+	mass_center /= float (n_points);
 
 	// Filling info array with angles and distances
 	for (size_t i = 0; i < n_points; i++)
@@ -24,9 +24,13 @@ Body::Body (Vectorf Position, float Mass, Vectorf Velocity, unsigned int nPoints
 		Vectorf deltaMassCenter = mass_center-pointsArray [i];
 
 		// x coord - distance to center
-		points [i].x = (deltaMassCenter).size ();
+		points [i].x = (deltaMassCenter).length ();
 		// y coord - additional angle
 		points [i].y = atan2 (deltaMassCenter.dir ().y, deltaMassCenter.dir ().x);
+		
+		// Calculating radius
+		if (points [i].x > radius)
+			radius = points [i].x;
 		}
 
 	// Calculating total inertia moment of a body
@@ -41,7 +45,7 @@ Body::~Body ()
 	free (points);
 	}
 
-void Body::applyForce (size_t point, Vector<float> Force, float dt)
+void Body::applyForce (int point, Vectorf Force, float dt)
 	{
 	if (0 <= point && point < n_points)
 		{
@@ -66,7 +70,7 @@ void Body::update (float dt)
 	Object::update (dt);
 	}
 
-Vectorf Body::getPointPos (size_t point)
+Vectorf Body::getPointPos (int point)
 	{
 	if (0 <= point && point < n_points)
 		{
@@ -82,6 +86,16 @@ Vectorf Body::getPointPos (size_t point)
 
 	// In case of incorrect point id function returns mass center coordinates
 	return r;
+	}
+
+float Body::getRadius ()
+	{
+	return radius;
+	}
+
+size_t Body::nPoints ()
+	{
+	return size_t (n_points);
 	}
 
 void Body::draw (sf::RenderWindow & window)
