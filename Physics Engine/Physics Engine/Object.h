@@ -12,21 +12,22 @@ enum objectType
 class Object
 	{
 	protected:
-		Vectorf r, v;
+		Vectord r, v;
 		float mass = 1;
-		uint32_t type = unnamed_type;
+		size_t type = unnamed_type;
 
 	public:
-		Object (Vectorf Position, float Mass, Vectorf Velocity);
+		Object (Vectord Position, float Mass, Vectord Velocity);
 		~Object ();
 
 		void update (float dt);
-		void addForce (Vectorf F, float dt);
+		void addForce (Vectord F, float dt);
 		
-		void accelerate (Vectorf a, float dt);
+		void accelerate (Vectord a, float dt);
 
-		Vectorf getPos ();
-		Vectorf getVel ();
+		Vectord getPos ();
+		Vectord getVel ();
+		size_t getType ();
 	
 	};
 

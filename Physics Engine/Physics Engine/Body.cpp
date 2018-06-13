@@ -1,17 +1,21 @@
 #include "Body.h"
 #include "Constants.h"
+#include "Draw.h"
 
-Body::Body (Vectorf Position, float Mass, Vectorf Velocity, unsigned int nPoints, Vectorf * pointsArray): 
+Body::Body (Vectord Position, float Mass, Vectord Velocity, 
+	        unsigned int nPoints, Vectord * pointsArray):
 	Object (Position, Mass, Velocity)
 	{
+	type = objectType::body;
+
 	// Creating array of points info
 	n_points = nPoints;
-	points = (Vectorf*) calloc (n_points, sizeof (Vectorf));
+	points = (Vectord*) calloc (n_points, sizeof (Vectord));
 	if (points == nullptr)
 		printf ("Failed to create array of points\n");
 
 	// Calculating coordinates of mass center
-	Vectorf mass_center;
+	Vectord mass_center;
 	for (size_t i = 0; i < n_points; i++)
 		mass_center = mass_center + pointsArray [i];
 
@@ -21,7 +25,7 @@ Body::Body (Vectorf Position, float Mass, Vectorf Velocity, unsigned int nPoints
 	for (size_t i = 0; i < n_points; i++)
 		{
 		// Point to mass center radius vector
-		Vectorf deltaMassCenter = mass_center-pointsArray [i];
+		Vectord deltaMassCenter = mass_center-pointsArray [i];
 
 		// x coord - distance to center
 		points [i].x = (deltaMassCenter).length ();
@@ -37,15 +41,13 @@ Body::Body (Vectorf Position, float Mass, Vectorf Velocity, unsigned int nPoints
 	J = 0;
 	for (size_t i = 0; i < n_points; i++)
 		J += points [i].x * points [i].x * (mass/n_points) / 3;
-
-	type = objectType::body;
 	}
 Body::~Body ()
 	{
-	free (points);
+ 	free (points);
 	}
 
-void Body::applyForce (int point, Vectorf Force, float dt)
+void Body::applyForce (int point, Vectord Force, float dt)
 	{
 	if (0 <= point && point < n_points)
 		{
@@ -58,13 +60,34 @@ void Body::applyForce (int point, Vectorf Force, float dt)
 		// to which the force is applied to the center of mass of the body) 
 		//
 		// (see picture "body rotation" in folder "explanations")
-		float activeForce = Force*Vectorf (pi/2 + angle+points [point].y);
+		float activeForce = Force*Vectord (pi/2 + angle+points [point].y);
 		
 		// Angular velocity increases proprtional to Torque 
 		omega += (activeForce * points [point].x)/J;
 		}
 	}
-void Body::applyForceToVirtual (Vectorf virtualPoint, Vectorf Force, float dt)
+void Body::applyAccel (int point, Vectord Accel, float dt)
+    { 
+    
+    if (0 <= point && point < n_points && Object::mass != INFINITY)
+        {
+        // Applying force directly to mass center:
+        Object::addForce (Accel*mass, dt);
+
+        // That part of the force that is able to rotate the body is equal to
+        // the scalar product of the force vector by the unit vector of angle
+        // (which is perpendicular to the radius vector from the point 
+        // to which the force is applied to the center of mass of the body) 
+        //
+        // (see picture "body rotation" in folder "explanations")
+        float activeForce = (Accel*mass)*Vectord (pi/2 + angle+points [point].y);
+
+        // Angular velocity increases proprtional to Torque 
+        omega += (activeForce * points [point].x)/J;
+        }
+    }
+
+void Body::applyForceToVirtual (Vectord virtualPoint, Vectord Force, float dt)
 	{ 
 	// Applying force directly to mass center:
 	Object::addForce (Force, dt);
@@ -75,12 +98,30 @@ void Body::applyForceToVirtual (Vectorf virtualPoint, Vectorf Force, float dt)
 	// to which the force is applied to the center of mass of the body) 
 	//
 	// (see picture "body rotation" in folder "explanations")
-	float activeForce = Force*Vectorf (pi/2 + angle + atan2f (virtualPoint.y - r.y, virtualPoint.x - r.x));
+	float activeForce = Force*Vectord (pi/2 + angle + atan2f (virtualPoint.y - r.y, virtualPoint.x - r.x));
 
 	// Angular velocity increases proprtional to Torque 
 	omega += (activeForce * (virtualPoint - r).length ())/J;
 	}
+void Body::accelerateVirtual (Vectord virtualPoint, Vectord Accel, float dt)
+    { 
+    if (Object::mass != INFINITY)
+        {
+        // Applying force directly to mass center:
+        Object::addForce (Accel*mass, dt);
 
+        // That part of the force that is able to rotate the body is equal to
+        // the scalar product of the force vector by the unit vector of angle
+        // (which is perpendicular to the radius vector from the point 
+        // to which the force is applied to the center of mass of the body) 
+        //
+        // (see picture "body rotation" in folder "explanations")
+        float activeForce = (Accel*mass)*Vectord (pi/2 + angle + atan2f (virtualPoint.y - r.y, virtualPoint.x - r.x));
+
+        // Angular velocity increases proprtional to Torque 
+        omega += (activeForce * (virtualPoint - r).length ())/J;
+        }
+    }
 
 void Body::update (float dt)
 	{
@@ -88,12 +129,12 @@ void Body::update (float dt)
 	Object::update (dt);
 	}
 
-Vectorf Body::getPointPos (int point)
+Vectord Body::getPointPos (int point)
 	{
 	if (0 <= point && point < n_points)
 		{
 		// Calculating current total angle of point:
-		Vectorf deltaPos (points [point].y+angle);
+		Vectord deltaPos (points [point].y+angle);
 		// Multiplying unit direction angle and distance from mass center
 		deltaPos = deltaPos*points [point].x;
 		// Adding position vector
@@ -105,43 +146,36 @@ Vectorf Body::getPointPos (int point)
 	// In case of incorrect point id function returns mass center coordinates
 	return r;
 	}
-
 float Body::getRadius ()
 	{
 	return radius;
 	}
-
 size_t Body::nPoints ()
 	{
 	return size_t (n_points);
 	}
 
+float Body::getMass ()
+    { 
+    return mass;
+    }
+
+float Body::getKinEnergy ()
+    {
+    return mass*(v*v)/2.f + J*omega*omega/2.f;
+    }
+
 void Body::draw (sf::RenderWindow & window)
 	{
-	// Drawing mass center point
-	sf::CircleShape point (5);
-	point.setOrigin (5, 5);
-	point.setPosition (r.x, r.y);
-
-	window.draw (point);
-
-	for (size_t i = 0; i < n_points; i++)
+	switch (type)
 		{
-		point.setPosition (r.x, r.y);
-
-			
-		Vectorf deltaPos (points [i].y+angle);
-		deltaPos = deltaPos*points [i].x;
-		point.move (deltaPos.toSf());
-		window.draw (point);
-
-		// Drawing line between point and mass center
-
-		sf::Vertex line [2] = 
-			{
-			line [0] = sf::Vertex (r.toSf (), sf::Color::White),
-			line [1] = sf::Vertex (point.getPosition (), sf::Color::White)
-			};
-		window.draw (line, 2, sf::LinesStrip);
+		case objectType::body:
+			Draw::body (window, this);
+			break;
+		case objectType::ground:
+			Draw::ground (window, this);
+			break;
+		default:
+			break;
 		}
 	}

@@ -1,7 +1,7 @@
 #include "Spring.h"
 #include "Constants.h"
 
-Spring::Spring (sf::Sprite* spring_spr, Vectorf begin, Vectorf end, float k)
+Spring::Spring (sf::Sprite* spring_spr, Vectord begin, Vectord end, float k)
 	{
 	// physics
 	hardness = k;
@@ -23,17 +23,17 @@ Spring::~Spring ()
 	}
 
 // Returns force applied to rights point
-Vectorf Spring::getForceRight ()
+Vectord Spring::getForceRight ()
 	{
-	return Vectorf (-Force);
+	return Vectord (-Force);
 	}
 // Returns force applied to left point
-Vectorf Spring::getForceLeft ()
+Vectord Spring::getForceLeft ()
 	{
-	return Vectorf (Force);
+	return Vectord (Force);
 	}
 
-void Spring::update (Vectorf begin, Vectorf end)
+void Spring::update (Vectord begin, Vectord end)
 	{
 	// Transforming difference between new (updated) positions of the ends into current size of the spring
 	curr_dist = (begin-end).length ();
@@ -65,7 +65,7 @@ void Spring::draw (sf::RenderWindow & window, bool points)
 	spring_sprite.setRotation (atan2 ((right - left).y, (right - left).x)*toDeg);
 
 	// Calculating radius vector of middle point between ends
-	// and converting Vectorf to sf::Vector2f
+	// and converting Vectord to sf::Vector2f
 	spring_sprite.setPosition ((right + left).toSf ()/2.f);
 
 	// Scaling sprite by width axis according to deformation
@@ -102,3 +102,8 @@ void Spring::draw (sf::RenderWindow & window, bool points)
 		window.draw (cs);
 		}
 	}
+
+float Spring::getPotEnergy ()
+    {
+    return hardness*delta_dist*delta_dist/2.0f;
+    }
