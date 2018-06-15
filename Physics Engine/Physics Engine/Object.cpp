@@ -20,7 +20,10 @@ void Object::addForce (Vectord F, float dt)
 	}
 void Object::accelerate (Vectord a, float dt)
 	{
-	v += a*dt;
+    if (mass == INFINITY)
+        a = Vectord (0, 0);
+    
+    v += a*dt;
 	}
 
 Vectord Object::getPos ()

@@ -96,10 +96,17 @@ float pointToLineDist (Vectord point, Vectord lineLeft, Vectord lineRight)
     return dist;
     }
 
+// TODO:
+// Materials propreties file load
+
 class CollisionPair: public Pair
 	{
 	private:
 		int p_left = -1, p_right = -1;
+
+        float hardness = 300000;
+        float potEnergy = 0;
+
 	public:
 		CollisionPair (size_t left, size_t right): Pair (left, right)
 			{
@@ -108,6 +115,8 @@ class CollisionPair: public Pair
 
 		void update (std::vector <Body*> all_objects, float dt)
 			{
+            potEnergy = 0;
+
 			Body* left  = all_objects [id_left];
 			Body* right = all_objects [id_right];
 			
@@ -141,10 +150,12 @@ class CollisionPair: public Pair
                         // N =               dir           *            dx              *
                         RestReaction = RestReaction.dir ();
 
-                        RestReaction *= (closestEdgeToPointDistance) * 10.f;
+                        RestReaction *= (closestEdgeToPointDistance) * hardness;
 
                         right->applyForce (i, RestReaction, dt);
                         left->applyForceToVirtual (right->getPointPos (i), -RestReaction, dt);
+                        
+                        potEnergy += (closestEdgeToPointDistance*closestEdgeToPointDistance*hardness/2);
                         }
 
                 
@@ -157,6 +168,6 @@ class CollisionPair: public Pair
 
         float getPotEnergy ()
             { 
-            return 0.f;
+            return potEnergy;
             }
 	};

@@ -22,7 +22,6 @@ class Object
 
 		void update (float dt);
 		void addForce (Vectord F, float dt);
-		
 		void accelerate (Vectord a, float dt);
 
 		Vectord getPos ();
