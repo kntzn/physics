@@ -1,6 +1,6 @@
 #include "Object.h"
 
-Object::Object  (Vectord Position, float Mass, Vectord Velocity)
+Object::Object  (Vectord Position, double Mass, Vectord Velocity)
 	{
 	r = Position;
 	v = Velocity;
@@ -10,15 +10,15 @@ Object::~Object ()
 	{
 	}
 
-void Object::update (float dt)
+void Object::update (double dt)
 	{
 	r += v*dt;
 	}
-void Object::addForce (Vectord F, float dt)
+void Object::addForce (Vectord F, double dt)
 	{
 	v += (F/mass)*dt;
 	}
-void Object::accelerate (Vectord a, float dt)
+void Object::accelerate (Vectord a, double dt)
 	{
     if (mass == INFINITY)
         a = Vectord (0, 0);

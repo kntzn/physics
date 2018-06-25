@@ -13,16 +13,16 @@ class Object
 	{
 	protected:
 		Vectord r, v;
-		float mass = 1;
+		double mass = 1;
 		size_t type = unnamed_type;
 
 	public:
-		Object (Vectord Position, float Mass, Vectord Velocity);
+		Object (Vectord Position, double Mass, Vectord Velocity);
 		~Object ();
 
-		void update (float dt);
-		void addForce (Vectord F, float dt);
-		void accelerate (Vectord a, float dt);
+		void update (double dt);
+		void addForce (Vectord F, double dt);
+		void accelerate (Vectord a, double dt);
 
 		Vectord getPos ();
 		Vectord getVel ();

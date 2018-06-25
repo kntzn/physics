@@ -17,9 +17,9 @@ class Pair
 
 	public:
 		virtual void draw (sf::RenderWindow & window, bool points = false) = 0;
-		virtual void update (std::vector <Body*> all_objects, float dt) = 0;
+		virtual void update (std::vector <Body*> all_objects, double dt) = 0;
 
-        virtual float getPotEnergy () = 0;
+        virtual double getPotEnergy () = 0;
        	};
 
 // Spring interaction pair
@@ -28,7 +28,7 @@ class SpringPair: protected Spring, public Pair
 	private:
 		int p_left = -1, p_right = -1;
 	public:
-		SpringPair (std::vector <Body*> all_objects, float k, sf::Sprite* sprite,
+		SpringPair (std::vector <Body*> all_objects, double k, sf::Sprite* sprite,
 			size_t left, size_t right, int point_left = -1, int point_right = -1):
 			// Inheritating from Spring class (by getting points coords info)
 			// In case point_left or point_right is equal to -1, getPointPos returns mass center
@@ -43,7 +43,7 @@ class SpringPair: protected Spring, public Pair
 			}
 
 		// Spring and objects updae
-		void update (std::vector <Body*> all_objects, float dt)
+		void update (std::vector <Body*> all_objects, double dt)
 			{
 			// Updates spring
 			Spring::update (all_objects [id_left]->getPointPos (p_left), 
@@ -59,6 +59,11 @@ class SpringPair: protected Spring, public Pair
 			{ 
 			Spring::draw (window, points);
 			}
+
+        double getPotEnergy ()
+            { 
+            return Spring::getPotEnergy ();
+            }
 	};
 
 bool inPoly (Body*body, Vectord pos)
@@ -80,32 +85,29 @@ bool inPoly (Body*body, Vectord pos)
 	return in;
 	}
 
-float pointToLineDist (Vectord point, Vectord lineLeft, Vectord lineRight)
+double pointToLineDist (Vectord point, Vectord lineLeft, Vectord lineRight)
     { 
     Vectord deltaLine = lineRight - lineLeft;
 
     if (deltaLine.x == 0.f)
         return fabs (point.x - lineLeft.x);
     
-    float k_Line = deltaLine.y/deltaLine.x;
-    float l_Line = lineLeft.y - lineLeft.x*k_Line;
+    double k_Line = deltaLine.y/deltaLine.x;
+    double l_Line = lineLeft.y - lineLeft.x*k_Line;
 
-    //       L =      |      ax       +     bx      +    c  | / sqrt (a^2     +     b^2)
-    float dist = fabs (point.x*k_Line - point.y*1.f + l_Line) / sqrt (k_Line*k_Line + 1);
-
-    return dist;
+    //   L =    |      ax       +     bx      +    c  | / sqrt (a^2     +     b^2)   
+    return fabs (point.x*k_Line - point.y*1.f + l_Line) / sqrt (k_Line*k_Line + 1);
     }
 
-// TODO:
-// Materials propreties file load
+// TODO: Materials propreties file load
 
 class CollisionPair: public Pair
 	{
 	private:
 		int p_left = -1, p_right = -1;
 
-        float hardness = 300000;
-        float potEnergy = 0;
+        double hardness = 10000000;
+        double potEnergy = 0;
 
 	public:
 		CollisionPair (size_t left, size_t right): Pair (left, right)
@@ -113,7 +115,7 @@ class CollisionPair: public Pair
             
 			}
 
-		void update (std::vector <Body*> all_objects, float dt)
+		void update (std::vector <Body*> all_objects, double dt)
 			{
             potEnergy = 0;
 
@@ -128,14 +130,14 @@ class CollisionPair: public Pair
 					if (inPoly (left, right->getPointPos (i)))
 						{
 						// ------Repulsion------
-                        float closestEdgeToPointDistance = INFINITY;
+                        double closestEdgeToPointDistance = INFINITY;
                         size_t closestEdge = 0;
                         size_t N = left->nPoints ();
 
                         // Finding closest edge
                         for (size_t j = 0; j < N; j++)
                             {
-                            float dist = pointToLineDist (right->getPointPos (i), left->getPointPos (j), left->getPointPos ((j+1)%N));
+                            double dist = pointToLineDist (right->getPointPos (i), left->getPointPos (j), left->getPointPos ((j+1)%N));
 
                             if (dist < closestEdgeToPointDistance)
                                 {
@@ -154,7 +156,7 @@ class CollisionPair: public Pair
 
                         right->applyForce (i, RestReaction, dt);
                         left->applyForceToVirtual (right->getPointPos (i), -RestReaction, dt);
-                        
+
                         potEnergy += (closestEdgeToPointDistance*closestEdgeToPointDistance*hardness/2);
                         }
 
@@ -166,8 +168,84 @@ class CollisionPair: public Pair
 			{
 			}
 
-        float getPotEnergy ()
+        double getPotEnergy ()
             { 
             return potEnergy;
             }
 	};
+
+
+// TODO: add constant field gravity for any angle
+
+class GravityPair: public Pair
+    {
+    private:
+        double potEnergy = 0;
+
+        enum type
+            {
+            const_field,
+            var_field
+            };
+
+        int type = -1;
+        Vectord acceleration = 0;
+
+
+    public:
+        GravityPair (std::vector <Body*> all_bodies, size_t right, size_t left): Pair (left, right)
+            {
+            type = var_field;
+
+            Vectord deltaDist = all_bodies [right]->getPos ()-all_bodies [left]->getPos ();
+            acceleration = deltaDist.dir ()*G*(all_bodies [right]->getMass ()*all_bodies [left]->getMass ())/
+                pow (deltaDist.length (), 2);
+            }
+        GravityPair (std::vector <Body*> all_bodies, size_t body, Vectord const_acceleration): Pair (body, -1)
+            {
+            type = const_field;
+            acceleration = const_acceleration;
+            }
+
+        void update (std::vector <Body*> all_bodies, double dt)
+            {
+            potEnergy = 0;
+
+            switch (type)
+                {
+                case const_field:
+                    {
+                    all_bodies [id_left]->accelerate (acceleration, dt);
+
+                    potEnergy = -all_bodies [id_left]->getPos ().y * 
+                                acceleration.length () * all_bodies [id_left]->getMass ();
+
+                    break;
+                    }
+                case var_field:
+                    {
+                    Vectord deltaDist = all_bodies [id_right]->getPos ()-all_bodies [id_left]->getPos ();
+                    acceleration = deltaDist.dir ()*G*(all_bodies [id_right]->getMass ()*all_bodies [id_left]->getMass ())/
+                        pow (deltaDist.length (), 2);
+                    all_bodies [id_left]->accelerate (-acceleration, dt);
+                    all_bodies [id_right]->accelerate (acceleration, dt);
+
+
+                    potEnergy = -G*(all_bodies [id_right]->getMass ()*all_bodies [id_left]->getMass ())/deltaDist.length ();
+                    break;
+                    }
+                default:
+                    break;
+                }
+            }
+
+        double getPotEnergy ()
+            {
+            return potEnergy;
+            }
+
+        void draw (sf::RenderWindow &window, bool points = false)
+            { 
+            
+            }
+    };

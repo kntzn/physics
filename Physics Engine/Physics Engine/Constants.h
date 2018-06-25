@@ -7,3 +7,4 @@
 
 // Gravity
 #define g (pi*pi) //Some teoretic features
+#define G (6.67 * pow (10, -11))

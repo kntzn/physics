@@ -65,7 +65,7 @@ template <typename dataType> class Vector
 			{
 			return Vector (-x, -y);
 			};
-		Vector operator/ (const float factor)
+		Vector operator/ (const double factor)
 			{
 			return Vector (x/factor, y/factor);
 			};
@@ -93,4 +93,4 @@ template <typename dataType> class Vector
 	};
 
 typedef Vector <float> Vectorf;
-typedef Vector <float> Vectord;
+typedef Vector <double> Vectord;

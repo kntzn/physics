@@ -4,7 +4,7 @@
 
 namespace Obj_Shape
 	{
-    Vectord* truePolygon (size_t n_points, float radius, float add_angle = 0)
+    Vectord* truePolygon (size_t n_points, double radius, double add_angle = 0)
 		{
         Vectord* points_address = (Vectord*) calloc (n_points, sizeof (Vectord));
 		if (points_address == nullptr)
@@ -12,7 +12,7 @@ namespace Obj_Shape
 		else
 			{
 			for (int i = 0; i < n_points; i++)
-				points_address [i] = Vectord ((float (i)/n_points)*(2.f*pi) + add_angle)*radius;
+				points_address [i] = Vectord ((double (i)/n_points)*(2.f*pi) + add_angle)*radius;
 			}
 
 		return points_address;

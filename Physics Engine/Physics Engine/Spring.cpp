@@ -1,7 +1,7 @@
 #include "Spring.h"
 #include "Constants.h"
 
-Spring::Spring (sf::Sprite* spring_spr, Vectord begin, Vectord end, float k)
+Spring::Spring (sf::Sprite* spring_spr, Vectord begin, Vectord end, double k)
 	{
 	// physics
 	hardness = k;
@@ -103,7 +103,7 @@ void Spring::draw (sf::RenderWindow & window, bool points)
 		}
 	}
 
-float Spring::getPotEnergy ()
+double Spring::getPotEnergy ()
     {
     return hardness*delta_dist*delta_dist/2.0f;
     }

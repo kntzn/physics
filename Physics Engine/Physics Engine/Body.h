@@ -11,32 +11,32 @@ class Body: public Object
 		size_t n_points = 0;
 
 		// Angle of the body
-		float angle = 0;
+		double angle = 0;
 		// Angular speed;
-		float omega = 0;
+		double omega = 0;
 		// Inertia moment
-		float J = 1;
+		double J = 1;
 		
 		// Maximum distance from mass center (farthest point)
-		float radius = 0;
+		double radius = 0;
 
 	public:
-		Body::Body (Vectord Position, float Mass, Vectord Velocity, unsigned int nPoints, Vectord * pointsArray);
+		Body::Body (Vectord Position, double Mass, Vectord Velocity, unsigned int nPoints, Vectord * pointsArray);
 		~Body ();
 
-		void applyForce (int point, Vectord Force, float dt);
-        void applyAccel (int point, Vectord Accel, float dt);
+		void applyForce (int point, Vectord Force, double dt);
+        void applyAccel (int point, Vectord Accel, double dt);
 
-        void applyForceToVirtual (Vectord virtualPoint, Vectord Force, float dt);
-        void accelerateVirtual   (Vectord virtualPoint, Vectord Accel, float dt);
+        void applyForceToVirtual (Vectord virtualPoint, Vectord Force, double dt);
+        void accelerateVirtual   (Vectord virtualPoint, Vectord Accel, double dt);
 		
-        void update (float dt);
+        void update (double dt);
 
 		Vectord getPointPos (int point);
-		float getRadius ();
+		double getRadius ();
 		size_t nPoints ();
-        float getMass ();
-        float getKinEnergy ();
+        double getMass ();
+        double getKinEnergy ();
 
 		void draw (sf::RenderWindow &window);
 		};

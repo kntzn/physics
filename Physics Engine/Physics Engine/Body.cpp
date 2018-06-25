@@ -2,13 +2,13 @@
 #include "Constants.h"
 #include "Draw.h"
 
-Body::Body (Vectord Position, float Mass, Vectord Velocity, 
+Body::Body (Vectord Position, double Mass, Vectord Velocity, 
 	        unsigned int nPoints, Vectord * pointsArray):
 	Object (Position, Mass, Velocity)
 	{
 	type = objectType::body;
 
-	// Creating array of points info
+	// Creating array of points coords
 	n_points = nPoints;
 	points = (Vectord*) calloc (n_points, sizeof (Vectord));
 	if (points == nullptr)
@@ -19,7 +19,7 @@ Body::Body (Vectord Position, float Mass, Vectord Velocity,
 	for (size_t i = 0; i < n_points; i++)
 		mass_center = mass_center + pointsArray [i];
 
-	mass_center /= float (n_points);
+	mass_center /= double (n_points);
 
 	// Filling info array with angles and distances
 	for (size_t i = 0; i < n_points; i++)
@@ -47,26 +47,27 @@ Body::~Body ()
  	free (points);
 	}
 
-void Body::applyForce (int point, Vectord Force, float dt)
+void Body::applyForce (int point, Vectord Force, double dt)
 	{
+
+    // Applying force directly to mass center:
+    Object::addForce (Force, dt);
+
 	if (0 <= point && point < n_points)
 		{
-		// Applying force directly to mass center:
-		Object::addForce (Force, dt);
-
 		// That part of the force that is able to rotate the body is equal to
 		// the scalar product of the force vector by the unit vector of angle
 		// (which is perpendicular to the radius vector from the point 
 		// to which the force is applied to the center of mass of the body) 
 		//
 		// (see picture "body rotation" in folder "explanations")
-		float activeForce = Force*Vectord (pi/2 + angle+points [point].y);
+		double activeForce = Force*Vectord (pi/2 + angle+points [point].y);
 		
 		// Angular velocity increases proprtional to Torque 
 		omega += (activeForce * points [point].x)/J;
 		}
 	}
-void Body::applyAccel (int point, Vectord Accel, float dt)
+void Body::applyAccel (int point, Vectord Accel, double dt)
     { 
     
     if (0 <= point && point < n_points && Object::mass != INFINITY)
@@ -80,14 +81,14 @@ void Body::applyAccel (int point, Vectord Accel, float dt)
         // to which the force is applied to the center of mass of the body) 
         //
         // (see picture "body rotation" in folder "explanations")
-        float activeForce = (Accel*mass)*Vectord (pi/2 + angle+points [point].y);
+        double activeForce = (Accel*mass)*Vectord (pi/2 + angle+points [point].y);
 
         // Angular velocity increases proprtional to Torque 
         omega += (activeForce * points [point].x)/J;
         }
     }
 
-void Body::applyForceToVirtual (Vectord virtualPoint, Vectord Force, float dt)
+void Body::applyForceToVirtual (Vectord virtualPoint, Vectord Force, double dt)
 	{ 
 	// Applying force directly to mass center:
 	Object::addForce (Force, dt);
@@ -98,12 +99,13 @@ void Body::applyForceToVirtual (Vectord virtualPoint, Vectord Force, float dt)
 	// to which the force is applied to the center of mass of the body) 
 	//
 	// (see picture "body rotation" in folder "explanations")
-	float activeForce = Force*Vectord (pi/2 + angle + atan2f (virtualPoint.y - r.y, virtualPoint.x - r.x));
+	double activeForce = Force*Vectord (pi/2 + angle + 
+                                        atan2f (virtualPoint.y - r.y, virtualPoint.x - r.x));
 
 	// Angular velocity increases proprtional to Torque 
 	omega += (activeForce * (virtualPoint - r).length ())/J;
 	}
-void Body::accelerateVirtual (Vectord virtualPoint, Vectord Accel, float dt)
+void Body::accelerateVirtual (Vectord virtualPoint, Vectord Accel, double dt)
     { 
     if (Object::mass != INFINITY)
         {
@@ -116,14 +118,14 @@ void Body::accelerateVirtual (Vectord virtualPoint, Vectord Accel, float dt)
         // to which the force is applied to the center of mass of the body) 
         //
         // (see picture "body rotation" in folder "explanations")
-        float activeForce = (Accel*mass)*Vectord (pi/2 + angle + atan2f (virtualPoint.y - r.y, virtualPoint.x - r.x));
+        double activeForce = (Accel*mass)*Vectord (pi/2 + angle + atan2f (virtualPoint.y - r.y, virtualPoint.x - r.x));
 
         // Angular velocity increases proprtional to Torque 
         omega += (activeForce * (virtualPoint - r).length ())/J;
         }
     }
 
-void Body::update (float dt)
+void Body::update (double dt)
 	{
 	angle += omega*dt;
 	Object::update (dt);
@@ -146,7 +148,7 @@ Vectord Body::getPointPos (int point)
 	// In case of incorrect point id function returns mass center coordinates
 	return r;
 	}
-float Body::getRadius ()
+double Body::getRadius ()
 	{
 	return radius;
 	}
@@ -155,12 +157,12 @@ size_t Body::nPoints ()
 	return size_t (n_points);
 	}
 
-float Body::getMass ()
+double Body::getMass ()
     { 
     return mass;
     }
 
-float Body::getKinEnergy ()
+double Body::getKinEnergy ()
     {
     return mass*(v*v)/2.f + J*omega*omega/2.f;
     }

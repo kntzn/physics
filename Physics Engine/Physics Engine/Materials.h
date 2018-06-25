@@ -4,9 +4,9 @@ namespace MATERIAL
     {
     struct Material
         {
-        float elasticity;
+        double elasticity;
 
-        Material (float ELAST)
+        Material (double ELAST)
             { 
             elasticity = ELAST;
             }
