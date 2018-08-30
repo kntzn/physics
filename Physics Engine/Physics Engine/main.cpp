@@ -113,7 +113,7 @@ int main ()
                 window.close ();    
 
             if (event.type == sf::Event::MouseWheelMoved)
-                deltaZoom = float (event.mouseWheel.delta)/20.f;
+                deltaZoom = float (event.mouseWheel.delta)/50.f;
             }
 
         // Energy variables
@@ -130,17 +130,18 @@ int main ()
         // Updating objects
         for (auto obj: all_objects)
             {
+            
+            obj->update (dt_c);
+            
             if (obj->getMass () != INFINITY)
                 KinEnergy += obj->getKinEnergy ();
-
-            obj->update (dt_c);
             }
 
         // Energy calculations:
         double deltaKinEnergy = KinEnergy - initialKineticEnergy;
         double deltaPotEnergy = PotEnergy - initialPotentialEnergy;
-        double EnergyLoss = (deltaKinEnergy + deltaPotEnergy);
-        double EnergyLossPerc = (deltaKinEnergy + deltaPotEnergy)/(KinEnergy + deltaPotEnergy)*100;
+        double EnergyLoss     = (deltaKinEnergy + deltaPotEnergy);
+        double EnergyLossPerc = EnergyLoss/(KinEnergy + deltaPotEnergy)*100;
 
         graph.addPoint (EnergyLoss);
         graph_y.addPoint (-all_objects [2]->getPos ().y);
@@ -153,9 +154,8 @@ int main ()
         window.setView (cam);
         
         if (!transitionEnded)
-            {
             cam.setCenter (camCenterPosBegin + sf::Vector2f (window.mapPixelToCoords (mousePosBegin) - window.mapPixelToCoords (sf::Mouse::getPosition (window))));
-            }
+            
 
         // Drawing everything
         window.clear ();
@@ -172,13 +172,10 @@ int main ()
         graph_y.draw (graph_window, cam_for_grpah_widow);
         
         // Output:
-        if (EnergyLoss > 0)
+        if (EnergyLoss >= 0)
             printf ("Energy Loss:  %lg%\n", EnergyLoss);
         else
             printf ("Additional E: %lg%\n", -EnergyLoss);
-
-        //printf ("potential E: %lg %lg\n", initialPotentialEnergy, deltaPotEnergy);
-
 
         window.display ();
         graph_window.display ();
