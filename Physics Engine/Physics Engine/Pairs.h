@@ -219,7 +219,7 @@ class GravityPair: public Pair
 
                     potEnergy = -all_bodies [id_left]->getPos ().y * 
                                 acceleration.length () * all_bodies [id_left]->getMass ();
-
+                    
                     break;
                     }
                 case var_field:

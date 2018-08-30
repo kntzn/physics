@@ -14,7 +14,7 @@ Spring::Spring (sf::Sprite* spring_spr, Vectord begin, Vectord end, double k)
 	spring_sprite = *spring_spr;
 	
 	scale_const = init_dist/(spring_spr->getOrigin ().x*2);
-	spring_sprite.scale (scale_const, 1);
+	spring_sprite.scale (scale_const, scale_const);
 	}
 
 Spring::~Spring ()
@@ -69,7 +69,7 @@ void Spring::draw (sf::RenderWindow & window, bool points)
 	spring_sprite.setPosition ((right + left).toSf ()/2.f);
 
 	// Scaling sprite by width axis according to deformation
-	spring_sprite.setScale (scale_const*(curr_dist/init_dist), 1);
+	spring_sprite.setScale (scale_const*(curr_dist/init_dist), scale_const);
 
 	// ------- Colors ------- 
 	// Setting color according to deformation (Red means stretched, blue means compressed)

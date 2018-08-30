@@ -19,7 +19,7 @@ class Spring
 		Vectord getForceRight ();
 		Vectord getForceLeft ();
 
-		void update (Vectord begin, Vectord end);
+        void update (Vectord begin, Vectord end);
 		void draw (sf::RenderWindow &window, bool points = false);
 
         double getPotEnergy ();
