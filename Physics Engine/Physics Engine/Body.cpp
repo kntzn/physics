@@ -49,7 +49,6 @@ Body::~Body ()
 
 void Body::applyForce (int point, Vectord Force, double dt)
 	{
-
     // Applying force directly to mass center:
     Object::addForce (Force, dt);
 
@@ -64,7 +63,7 @@ void Body::applyForce (int point, Vectord Force, double dt)
 		double activeForce = Force*Vectord (pi/2 + angle+points [point].y);
 		
 		// Angular velocity increases proprtional to Torque 
-		omega += (activeForce * points [point].x)/J;
+		omega += (activeForce * points [point].x)/J*dt;
 		}
 	}
 void Body::applyAccel (int point, Vectord Accel, double dt)
@@ -84,7 +83,7 @@ void Body::applyAccel (int point, Vectord Accel, double dt)
         double activeForce = (Accel*mass)*Vectord (pi/2 + angle+points [point].y);
 
         // Angular velocity increases proprtional to Torque 
-        omega += (activeForce * points [point].x)/J;
+        omega += (activeForce * points [point].x)/J*dt;
         }
     }
 
@@ -103,7 +102,7 @@ void Body::applyForceToVirtual (Vectord virtualPoint, Vectord Force, double dt)
                                         atan2f (virtualPoint.y - r.y, virtualPoint.x - r.x));
 
 	// Angular velocity increases proprtional to Torque 
-	omega += (activeForce * (virtualPoint - r).length ())/J;
+	omega += (activeForce * (virtualPoint - r).length ())/J*dt;
 	}
 void Body::accelerateVirtual (Vectord virtualPoint, Vectord Accel, double dt)
     { 
@@ -121,7 +120,7 @@ void Body::accelerateVirtual (Vectord virtualPoint, Vectord Accel, double dt)
         double activeForce = (Accel*mass)*Vectord (pi/2 + angle + atan2f (virtualPoint.y - r.y, virtualPoint.x - r.x));
 
         // Angular velocity increases proprtional to Torque 
-        omega += (activeForce * (virtualPoint - r).length ())/J;
+        omega += (activeForce * (virtualPoint - r).length ())/J*dt;
         }
     }
 

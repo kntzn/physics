@@ -26,21 +26,22 @@ int main ()
 	sf::Texture ground_fill_txtr = loadTextureWithMask ("ground.png");
 	
     // - OBJECTS AND INTERACTIONS - 
-	Vectord* points_array = Obj_Shape::truePolygon (4, 0.5, pi/4);
+	Vectord* points_array = Obj_Shape::truePolygon (4, 0.25, pi/4);
 
 	std::vector <Body*> all_objects;
 	std::vector <Pair*> interaction_pairs;
 
-    all_objects.push_back (new Ground (ground_fill_txtr, Vectord (1, 1), 4, Obj_Shape::rectangle (Vectord (0.5, 0.5))));
-    all_objects.push_back (new Ground (ground_fill_txtr, Vectord (5, 1), 4, Obj_Shape::rectangle (Vectord (0.5, 0.5))));
-    all_objects.push_back (new Body (Vectord (5, 4), 10, Vectord (0, -0.1), 4, points_array));
     
-    //all_objects.push_back (new Body (Vectord (300, 400),   1000, Vectord (0, 0), 4, points_array));
-    //all_objects.push_back (new Body (Vectord (600, 800), 1000, Vectord (0, 0), 4, points_array));
-    
-    interaction_pairs.push_back (new SpringPair (all_objects, 100, &spring_sprite, 2, 1, -1, -1));
-    interaction_pairs.push_back (new GravityPair (all_objects, 2, Vectord (0, g)));
 
+    for (int i = 0; i < 10; i++)
+        all_objects.push_back (new Body (Vectord ((rand () % 200) / 10.0, (rand()%200)/10.0), 10, Vectord (0, (rand () % 21 - 10) / 10.0), 4, points_array));
+
+    for (int i = 0; i < all_objects.size (); i++)
+        for (int j = i + 1; j < all_objects.size (); j++)
+            {
+            interaction_pairs.push_back (new SpringPair (all_objects, 100, &spring_sprite, i, j, 1, 0));
+            }
+  
 
     // - CAMERA, TIME AND WINDOW - 
     // Window
@@ -56,7 +57,7 @@ int main ()
     sf::Vector2f camCenterPosBegin = cam.getCenter ();
 
     // Time
-	const double dt_c = 0.001f;
+	const double dt_c = 0.016f;
     sf::Clock timer;
     
     // --------- ENERGY --------- 
@@ -88,7 +89,7 @@ int main ()
     // ------- MAIN CYCLE ------- 
 	while (window.isOpen ())
 		{
-		//double dt_c = timer.getElapsedTime ().asSeconds ();
+		double dt_val = timer.getElapsedTime ().asSeconds ();
 		timer.restart ();
 
         // Events
@@ -172,10 +173,15 @@ int main ()
         graph_y.draw (graph_window, cam_for_grpah_widow);
         
         // Output:
+
+        /*
         if (EnergyLoss >= 0)
             printf ("Energy Loss:  %lg%\n", EnergyLoss);
         else
             printf ("Additional E: %lg%\n", -EnergyLoss);
+            */
+
+        printf ("%d\n", int (1/dt_val));
 
         window.display ();
         graph_window.display ();

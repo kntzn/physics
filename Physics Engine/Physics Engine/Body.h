@@ -21,7 +21,8 @@ class Body: public Object
 		double radius = 0;
 
 	public:
-		Body::Body (Vectord Position, double Mass, Vectord Velocity, unsigned int nPoints, Vectord * pointsArray);
+		Body::Body (Vectord Position, double Mass, Vectord Velocity, 
+                    unsigned int nPoints, Vectord * pointsArray);
 		~Body ();
 
 		void applyForce (int point, Vectord Force, double dt);

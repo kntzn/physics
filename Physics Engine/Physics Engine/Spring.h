@@ -11,7 +11,7 @@ class Spring
 		Vectord right, left, Force;
 		double hardness = 1;
 		double init_dist = 0, curr_dist = 0, delta_dist = 0,
-			  max_dist  = 0, min_dist  = 0;
+			   max_dist  = 0, min_dist  = 0;
 	public:
 		Spring (sf::Sprite* spring_spr, Vectord begin, Vectord end, double k);
 		~Spring ();
