@@ -31,17 +31,14 @@ int main ()
 	std::vector <Body*> all_objects;
 	std::vector <Pair*> interaction_pairs;
 
-    
+    all_objects.push_back (new Ground (ground_fill_txtr, Vectord (1, 1), 4, points_array));
+    all_objects.push_back (new Body (Vectord (1, 2), 10, Vectord (0, 0), 4, points_array));
+    all_objects.push_back (new Body (Vectord (1, 3), 10, Vectord (0, 0), 4, points_array));
 
-    for (int i = 0; i < 10; i++)
-        all_objects.push_back (new Body (Vectord ((rand () % 200) / 10.0, (rand()%200)/10.0), 10, Vectord (0, (rand () % 21 - 10) / 10.0), 4, points_array));
-
-    for (int i = 0; i < all_objects.size (); i++)
-        for (int j = i + 1; j < all_objects.size (); j++)
-            {
-            interaction_pairs.push_back (new SpringPair (all_objects, 100, &spring_sprite, i, j, 1, 0));
-            }
-  
+    interaction_pairs.push_back (new SpringPair (all_objects, 10000, &spring_sprite, 1, 0, 0, -1));
+    interaction_pairs.push_back (new SpringPair (all_objects, 10000, &spring_sprite, 1, 2, 2, 0));
+    interaction_pairs.push_back (new GravityPair (all_objects, 1, Vectord (0, g)));
+    interaction_pairs.push_back (new GravityPair (all_objects, 2, Vectord (0, g)));
 
     // - CAMERA, TIME AND WINDOW - 
     // Window
@@ -57,7 +54,7 @@ int main ()
     sf::Vector2f camCenterPosBegin = cam.getCenter ();
 
     // Time
-	const double dt_c = 0.016f;
+	const double dt_c = 0.001f;
     sf::Clock timer;
     
     // --------- ENERGY --------- 
@@ -89,10 +86,10 @@ int main ()
     // ------- MAIN CYCLE ------- 
 	while (window.isOpen ())
 		{
-		double dt_val = timer.getElapsedTime ().asSeconds ();
+        double dt_val = dt_c;// timer.getElapsedTime ().asSeconds ();
 		timer.restart ();
 
-        // Events
+        // Main window event handler
         deltaZoom = 0;
         sf::Event event;
         while (window.pollEvent (event))
@@ -117,6 +114,14 @@ int main ()
                 deltaZoom = float (event.mouseWheel.delta)/50.f;
             }
 
+        // Graph window event handler
+        while (graph_window.pollEvent (event))
+            {
+            if (event.type == sf::Event::Closed)
+                graph_window.close ();
+            }
+        
+
         // Energy variables
         double KinEnergy = 0;
         double PotEnergy = 0;
@@ -131,7 +136,6 @@ int main ()
         // Updating objects
         for (auto obj: all_objects)
             {
-            
             obj->update (dt_c);
             
             if (obj->getMass () != INFINITY)
@@ -147,7 +151,6 @@ int main ()
         graph.addPoint (EnergyLoss);
         graph_y.addPoint (-all_objects [2]->getPos ().y);
 
-        
 
         // --------- Graphics ---------
 		// Camera
