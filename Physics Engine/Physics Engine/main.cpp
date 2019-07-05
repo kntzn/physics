@@ -15,9 +15,22 @@
 #include "Graph.h"
 
 
+// Vector -?--> Object
+//              Object -> Body
+//                        Body --?--> Tire
+//                      
+// Pair     -> SpringPair  
+//             SpringPair  --?--> RealisticSpringPair
+// Pair     -> GravityPair
+// Pair --?--> Rigid joint
+// Pair --?--> Weld
+//
+//
+
+
 int main ()
 	{
-    // -------- GRAPHICS -------- 
+    // -------- GRAPHICS ---------
     sf::Texture txtr = loadTextureWithMask ("spr.png");
 	sf::Sprite spring_sprite;
 	spring_sprite.setTexture (txtr);
@@ -25,7 +38,7 @@ int main ()
 
 	sf::Texture ground_fill_txtr = loadTextureWithMask ("ground.png");
 	
-    // - OBJECTS AND INTERACTIONS - 
+    // ---- OBJECTS AND PAIRS ---- 
 	Vectord* points_array = Obj_Shape::truePolygon (4, 0.25, pi/4);
 
 	std::vector <Body*> all_objects;
@@ -78,11 +91,6 @@ int main ()
     Graph graph (900, sf::Color::Magenta);
     Graph graph_y (900, sf::Color::Green);
     
-
-    Spring spr (&spring_sprite, Vectord (0, 0), Vectord (100, 100), 1);
-    //spr.scale_const = 1;
-
-
     // ------- MAIN CYCLE ------- 
 	while (window.isOpen ())
 		{
@@ -121,7 +129,7 @@ int main ()
                 graph_window.close ();
             }
         
-
+        // ---------- Physics ---------
         // Energy variables
         double KinEnergy = 0;
         double PotEnergy = 0;
@@ -158,9 +166,10 @@ int main ()
         window.setView (cam);
         
         if (!transitionEnded)
-            cam.setCenter (camCenterPosBegin + sf::Vector2f (window.mapPixelToCoords (mousePosBegin) - window.mapPixelToCoords (sf::Mouse::getPosition (window))));
-            
-
+            cam.setCenter (camCenterPosBegin + 
+                           sf::Vector2f (window.mapPixelToCoords (mousePosBegin) -
+                                         window.mapPixelToCoords (sf::Mouse::getPosition (window))));
+        
         // Drawing everything
         window.clear ();
         graph_window.clear ();
@@ -176,16 +185,11 @@ int main ()
         graph_y.draw (graph_window, cam_for_grpah_widow);
         
         // Output:
-
-        /*
-        if (EnergyLoss >= 0)
+        /*if (EnergyLoss >= 0)
             printf ("Energy Loss:  %lg%\n", EnergyLoss);
         else
-            printf ("Additional E: %lg%\n", -EnergyLoss);
-            */
-
-        printf ("%d\n", int (1/dt_val));
-
+            printf ("Additional E: %lg%\n", -EnergyLoss);*/
+        
         window.display ();
         graph_window.display ();
 		}
