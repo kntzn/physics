@@ -21,7 +21,7 @@ General Objects:
 
 Bodies:
 MPoint (Object)
-Mpoint -> Body
+Mpoint -> Body 
           Body -> Ground
           Body -> Tire
        
@@ -34,9 +34,19 @@ Pair| + Spring    -> SpringPair
 
 */
 
+#include <iostream>
 
 int main ()
     { 
-    Vector2 <double> v ();
+    MPoint mp (Vectord (0, 0), 10, Vectord (1, 0));
     
+    const double dt_c = 0.016f;
+
+    for (int i = 0; i < 1000; i++)
+        { 
+        mp.integrateEuler (dt_c);
+        std::cout << mp.getKinEnergy () << std::endl;
+        }
+
+    system ("pause");
     }

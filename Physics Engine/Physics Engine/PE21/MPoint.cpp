@@ -2,7 +2,10 @@
 
 MPoint::MPoint (Vectord position,
                 double mass,
-                Vectord velocity)
+                Vectord velocity):
+    r (position),
+    m (mass),
+    V (velocity)
     {
     }
 MPoint::~MPoint ()
@@ -14,6 +17,7 @@ void MPoint::integrateEuler (double dt)
     {
     V += Vectord (a * dt);
     r += Vectord (V * dt);
+
     a = Vectord (0, 0);
     }
 

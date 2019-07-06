@@ -25,14 +25,10 @@ template <typename T> class Vector2
             { }
 
         // Getters
-        T length (const T &right) const
+        T length () const
             {
-            if (this->length ())
-                {
-                T k = right / this->length ();
-                this->x *= k;
-                this->y *= k;
-                }
+            return T (sqrt (this->x * this->x +
+                            this->y * this->y));
             }
         
         // Plus

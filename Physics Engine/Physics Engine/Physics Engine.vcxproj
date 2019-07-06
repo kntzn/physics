@@ -26,6 +26,7 @@
   <ItemGroup>
     <ClInclude Include="PE21.h" />
     <ClInclude Include="PE21\MPoint.h" />
+    <ClInclude Include="PE21\Resources\Constants.h" />
     <ClInclude Include="PE21\Vector.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

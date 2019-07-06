@@ -35,5 +35,8 @@
     <ClInclude Include="PE21\MPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PE21\Resources\Constants.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
