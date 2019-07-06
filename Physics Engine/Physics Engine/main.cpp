@@ -7,15 +7,36 @@
 
   This file is just a sandbox.
   Engine itself is a library.
+  Most of the methods, classes etc came from PE2.
+  Version 2.1 is improved version of the PE2
+
 */
 
 #include "PE21.h"
 
+/*
+Quick description:
+
+General Objects:
+
+Bodies:
+MPoint (Object)
+Mpoint -> Body
+          Body -> Ground
+          Body -> Tire
+       
+Interactions:
+Pair| + Spring    -> SpringPair
+    | + Gravity   -> GravityPair
+    | + Collision -> CollisionPair
+    | + Rigid     -> RigidPair
+    |
+
+*/
+
+
 int main ()
     { 
-    Vector2 <double> kek_vec;
-
-    kek_vec += Vector2 <double> (10, 10);
-
-
+    Vector2 <double> v ();
+    
     }

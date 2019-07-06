@@ -2,7 +2,6 @@
 #define _VECTOR_H
 
 #include <math.h>
-#include <iostream>
 
 template <typename T> class Vector2
     {
@@ -10,7 +9,8 @@ template <typename T> class Vector2
         // Data
         T x, y;
 
-        // Constructors and destructors
+        // Constructors
+
         Vector2 ():
             x (0),
             y (0)
@@ -19,9 +19,9 @@ template <typename T> class Vector2
             x (X),
             y (Y)
             { }
-        Vector2 (T alpha):
-            x (cos (alpha)),
-            y (sin (alpha))
+        Vector2 (double alpha):
+            x (cos (alpha) * len),
+            y (sin (alpha) * len)
             { }
 
         // Getters
@@ -159,6 +159,10 @@ template <typename T> class Vector2
         #endif // SFML_VECTOR2_HPP
 
     };
+
+typedef Vector2 <int> Vectori;
+typedef Vector2 <float> Vectorf;
+typedef Vector2 <double> Vectord;
 
 #endif // !_VECTOR_H
 

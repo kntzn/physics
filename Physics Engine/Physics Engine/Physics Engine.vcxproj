@@ -21,9 +21,11 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PE21.cpp" />
+    <ClCompile Include="PE21\MPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PE21.h" />
+    <ClInclude Include="PE21\MPoint.h" />
     <ClInclude Include="PE21\Vector.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
