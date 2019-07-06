@@ -9,7 +9,13 @@
   Engine itself is a library.
 */
 
+#include "PE21.h"
+
 int main ()
     { 
-    
+    Vector2 <double> kek_vec;
+
+    kek_vec += Vector2 <double> (10, 10);
+
+
     }

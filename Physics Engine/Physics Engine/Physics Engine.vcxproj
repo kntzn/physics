@@ -24,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PE21.h" />
+    <ClInclude Include="PE21\Vector.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CA501776-4E57-4D8C-B01F-5BC67FCE0F94}</ProjectGuid>
