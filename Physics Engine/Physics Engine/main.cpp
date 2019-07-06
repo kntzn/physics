@@ -38,14 +38,12 @@ Pair| + Spring    -> SpringPair
 
 int main ()
     { 
-    MPoint mp (Vectord (0, 0), 10, Vectord (1, 0));
-    
+    Body b (Vectord (0, 0), 1.0, Vectord (1, 0), 0, nullptr);
+
     const double dt_c = 0.016f;
 
     for (int i = 0; i < 1000; i++)
         { 
-        mp.integrateEuler (dt_c);
-        std::cout << mp.getKinEnergy () << std::endl;
         }
 
     system ("pause");

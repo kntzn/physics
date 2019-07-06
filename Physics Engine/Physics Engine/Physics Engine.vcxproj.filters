@@ -24,6 +24,9 @@
     <ClCompile Include="PE21\MPoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PE21\Body.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PE21.h">
@@ -37,6 +40,9 @@
     </ClInclude>
     <ClInclude Include="PE21\Resources\Constants.h">
       <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PE21\Body.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

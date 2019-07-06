@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PE21.cpp" />
+    <ClCompile Include="PE21\Body.cpp" />
     <ClCompile Include="PE21\MPoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PE21.h" />
+    <ClInclude Include="PE21\Body.h" />
     <ClInclude Include="PE21\MPoint.h" />
     <ClInclude Include="PE21\Resources\Constants.h" />
     <ClInclude Include="PE21\Vector.h" />

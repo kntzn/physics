@@ -20,17 +20,32 @@ template <typename T> class Vector2
             y (Y)
             { }
         Vector2 (double alpha):
-            x (cos (alpha) * len),
-            y (sin (alpha) * len)
+            x (cos (alpha)),
+            y (sin (alpha))
             { }
 
         // Getters
-        T length () const
+        double length () const
             {
             return T (sqrt (this->x * this->x +
                             this->y * this->y));
             }
         
+        Vector2 <T> mod () const
+            { 
+            if (this->length ())
+                { 
+                double k = 1.0 / this->length ();
+
+                return Vector2 <T> (this->x * k,
+                                    this->y * k);
+                }
+
+            return Vector2 <T> (0, 0);
+            }
+
+        // Operators
+
         // Plus
         Vector2 <T> operator + (const Vector2 <T> &right) const
             {
@@ -78,7 +93,7 @@ template <typename T> class Vector2
             return Vector2 <T> (this->x*factor, 
                                 this->y*factor);
             }
-        Vector2 <T> operator *= (const T &factor) const
+        Vector2 <T> operator *= (const T &factor) 
             {
             return Vector2 <T> (this->x = this->x * factor,
                                 this->y = this->y * factor);
@@ -93,11 +108,11 @@ template <typename T> class Vector2
             else
                 return Vector2 <T> (NAN, NAN);
             }
-        Vector2 <T> operator /= (const T &factor) const
+        Vector2 <T> operator /= (const T &factor) 
             {
             if (factor)
                 return Vector2 <T> (this->x = this->x / factor,
-                                this->y = this->y / factor);
+                                    this->y = this->y / factor);
             else
                 return Vector2 <T> (0, 0);
             }
