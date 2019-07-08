@@ -23,12 +23,14 @@
     <ClCompile Include="PE21.cpp" />
     <ClCompile Include="PE21\Body.cpp" />
     <ClCompile Include="PE21\MPoint.cpp" />
+    <ClCompile Include="PE21\Shapes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PE21.h" />
     <ClInclude Include="PE21\Body.h" />
     <ClInclude Include="PE21\MPoint.h" />
     <ClInclude Include="PE21\Resources\Constants.h" />
+    <ClInclude Include="PE21\Shapes.h" />
     <ClInclude Include="PE21\Vector.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

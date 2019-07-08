@@ -35,9 +35,16 @@ Pair| + Spring    -> SpringPair
 */
 
 #include <iostream>
+//#include <SFML\Graphics.hpp>
 
 int main ()
     { 
+    PE21 physeng;
+
+    Shape s (nullptr, 20);
+
+    std::cout << size_t (s) << std::endl;
+
     Body b (Vectord (0, 0), 1.0, Vectord (1, 0), 0, nullptr);
 
     const double dt_c = 0.016f;

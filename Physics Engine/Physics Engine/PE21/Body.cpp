@@ -20,7 +20,9 @@ Body::Body (Vectord Position, double Mass, Vectord Velocity,
 	for (size_t i = 0; i < n_points; i++)
 		mass_center += pointsArray [i];
 
-	mass_center /= double (n_points);
+    // If this body is not the material point
+    if (n_points)
+	    mass_center /= double (n_points);
 
 	// Filling info array with angles and distances
 	for (size_t i = 0; i < n_points; i++)

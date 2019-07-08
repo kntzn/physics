@@ -5,7 +5,7 @@ class Body: public MPoint
 	{
 	protected:
 		// Vectors that contains points' 
-        // from mass center (x) and 
+        // distance from mass center (x) and 
         // additional angle of rotation (y)
 		Vectord * points = nullptr;
 		// Number of points
@@ -23,7 +23,7 @@ class Body: public MPoint
 
 	public:
 		Body::Body (Vectord Position, double Mass, Vectord Velocity, 
-                    unsigned int nPoints, Vectord * pointsArray);
+                    unsigned int nPoints, Vectord * pointsArray = nullptr);
 		~Body ();
 
 		void applyForce (int point, Vectord Force, double dt);
